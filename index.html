@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<style>
+body{
+ margin:0;
+ font-family:'Poppins',sans-serif;
+ background:linear-gradient(270deg,#fff0f3,#ffd6e0,#fff0f3);
+ text-align:center;
+ overflow:hidden;
+}
+
+.page{
+ display:none;
+ min-height:100vh;
+ padding:40px 20px;
+}
+.page.active{display:block;}
+
+.card{
+ background:white;
+ max-width:540px;
+ margin:auto;
+ padding:35px;
+ border-radius:25px;
+ box-shadow:0 20px 40px rgba(255,77,109,0.3);
+}
+
+h1,h2{
+ font-family:'Dancing Script',cursive;
+ color:#c9184a;
+}
+
+.btn{
+ padding:12px 35px;
+ border-radius:25px;
+ border:none;
+ cursor:pointer;
+ font-weight:bold;
+ margin:15px;
+}
+.next{background:#ff4d6d;color:white}
+.yes{background:#4CAF50;color:white}
+
+.chat{
+ background:#ffe5ec;
+ padding:15px;
+ border-radius:15px;
+ margin:10px auto;
+ max-width:420px;
+ text-align:left;
+}
+
+.gallery img{
+ width:100%;
+ max-width:220px;
+ margin:10px;
+ border-radius:15px;
+}
+
+iframe{
+ border-radius:15px;
+ margin-top:15px;
+}
+
+.letter{
+ text-align:left;
+ line-height:1.7;
+ font-size:1rem;
+ color:#444;
+}
+.letter p{margin-bottom:15px}
+
+.countdown{
+ font-size:1.2rem;
+ margin:15px 0;
+ color:#ff4d6d;
+ font-weight:600;
+}
+
+/* POPUP MESSAGE */
+.popup {
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,0.4);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ z-index:1000;
+}
+.popup.active { display:flex; }
+.popup-card{
+ background:white;
+ width:90%;
+ max-width:420px;
+ padding:30px;
+ border-radius:25px;
+ box-shadow:0 20px 40px rgba(255,77,109,0.4);
+ animation:scaleIn 0.3s ease;
+}
+@keyframes scaleIn{
+ from{transform:scale(0.7);opacity:0}
+ to{transform:scale(1);opacity:1}
+}
+.popup-text{
+ font-size:1rem;
+ line-height:1.6;
+ color:#444;
+ text-align:left;
+ min-height:80px;
+}
+.close-btn{
+ margin-top:20px;
+ background:#ff4d6d;
+ color:white;
+ border:none;
+ padding:10px 25px;
+ border-radius:20px;
+ font-weight:bold;
+ cursor:pointer;
+}
+.swipe-hint{
+ font-size:0.8rem;
+ opacity:0.6;
+ margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LETTER MUSIC -->
+<audio id="letterMusic" loop>
+ <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
+</audio>
+
+<!-- POPUP MESSAGE -->
+<div class="popup" id="popup">
+ <div class="popup-card">
+  <h3 style="color:#c9184a;font-family:'Dancing Script',cursive;">A Little Message 💌</h3>
+  <div class="popup-text" id="popupText"></div>
+  <button class="close-btn" onclick="closePopup()">Close</button>
+ </div>
+</div>
+
+<audio id="msgSound">
+ <source src="https://assets.mixkit.co/sfx/preview/mixkit-soft-pop-button-2589.mp3">
+</audio>
+
+<!-- PAGE 1 : PASSWORD -->
+<section class="page active">
+ <div class="card">
+  <h2>🔐 A Small Surprise</h2>
+  <input type="password" id="pass" placeholder="Password" style="padding:10px;border-radius:10px;width:80%">
+  <br><br>
+  <button class="btn next" onclick="unlock()">Start 💖</button>
+ </div>
+</section>
+
+<!-- PAGE 2 : BIRTHDAY + COUNTDOWN -->
+<section class="page">
+ <div class="card">
+  <h1>Happy Birthday 🎂</h1>
+  <p>Today feels special… because <b>you</b> exist ❤️</p>
+  <div class="countdown" id="countdown">Loading countdown...</div>
+  <h3>🎵 Your Song 🎵</h3>
+  <iframe width="300" height="170" src="https://www.youtube.com/embed/XKwXKA4RQuU" allowfullscreen></iframe>
+  <button class="btn next" onclick="nextPage()">Next ➡️</button>
+ </div>
+</section>
+
+<!-- PAGE 3 : CHAT -->
+<section class="page">
+ <div class="card">
+  <h2>A Few Words From Me 💬</h2>
+  <div class="chat">Hey 😊</div>
+  <div class="chat">I hope today wraps you in smiles</div>
+  <div class="chat">Also… how do you manage to look good every single day?</div>
+  <div class="chat">Not fair, honestly ❤️</div>
+  <button class="btn next" onclick="nextPage()">Next ➡️</button>
+ </div>
+</section>
+
+<!-- PAGE 4 : LOVE LETTER -->
+<section class="page" id="letterPage">
+ <div class="card">
+  <h2>For You, From My Heart 💌</h2>
+  <div class="letter">
+   <p>Happy Birthday to the girl who somehow manages to be cute, smart, and a serious distraction — all at once. My brain officially files you under “pleasant problem.”</p>
+   <p>I tried writing something calm and mature, but then I thought about your smile and forgot how to be serious.</p>
+   <p>You have this unfair talent of making moments better just by existing. Your laugh should come with a warning, and that confident smile? Yeah… dangerous.</p>
+   <p>I admire you more than you realize — your kindness, your strength, and how you pretend you don’t know how attractive you are 😉</p>
+   <p style="font-family:'Dancing Script',cursive;font-size:1.3rem;color:#c9184a;">— Someone who really enjoys you ❤️</p>
+  </div>
+  <button class="btn next" onclick="nextPage()">Next ➡️</button>
+ </div>
+</section>
+
+<!-- PAGE 5 : MEMORIES -->
+<section class="page">
+ <div class="card">
+  <h2>Some Sweet Memories 📸</h2>
+  <div class="gallery">
+   <img src="https://picsum.photos/300?1">
+   <img src="https://picsum.photos/300?2">
+  </div>
+  <button class="btn next" onclick="nextPage()">Next ➡️</button>
+ </div>
+</section>
+
+<!-- PAGE 6 : OPEN WHEN -->
+<section class="page">
+ <div class="card">
+  <h2>Open When… 💌</h2>
+  <button class="btn next" onclick="openMessage('alone')">When you feel alone 😔</button>
+  <button class="btn next" onclick="openMessage('nostalgic')">When you feel nostalgic 🌸</button>
+  <button class="btn next" onclick="openMessage('boost')">When you need a boost 💪</button>
+  <button class="btn next" onclick="openMessage('smile')">When you want to smile 😊</button>
+  <button class="btn next" onclick="openMessage('night')">Late night thoughts 🌙</button>
+  <div class="swipe-hint">← Swipe for next page →</div>
+  <button class="btn next" onclick="nextPage()">Next ➡️</button>
+ </div>
+</section>
+
+<!-- PAGE 7 : DATE -->
+<section class="page">
+ <div class="card">
+  <h2>One Small Question 💕</h2>
+  <p>Would you like to go on a <b>birthday dinner date</b> with me? 🎂🍽️</p>
+  <button class="btn yes" onclick="dateYes()">YES 😊</button>
+  <button class="btn next" id="noBtn">NO 😅</button>
+ </div>
+</section>
+
+<!-- PAGE 8 : MAGICAL BOUQUET -->
+<section class="page" id="treePage">
+  <div class="card">
+    <h2>💐 Magical Bouquet 💐</h2>
+    <img src="https://i.postimg.cc/9FD8VrkJ/magical-bouquet.png" alt="Magical Bouquet" style="width:100%;max-width:350px;border-radius:20px;margin-top:15px;">
+    <p style="margin-top:15px;">Sending you all my love ❤️</p>
+    <button class="btn next" onclick="nextPage()">Next ➡️</button>
+  </div>
+</section>
+
+<!-- PAGE 9 : YOUR OWN DRAWING -->
+<section class="page" id="myDrawingPage">
+  <div class="card">
+    <h2>🎨 Your Special Drawing 🎨</h2>
+    <img id="myDrawingImg" src="" alt="Your Drawing" style="width:100%;max-width:350px;border-radius:20px;display:none;margin-top:15px;">
+    <p style="margin-top:15px;">Here’s something special drawn just for you ❤️</p>
+    <button class="btn next" onclick="restart()">Restart 🔄</button>
+  </div>
+</section>
+
+<script>
+let current=0;
+const pages=document.querySelectorAll(".page");
+const letterMusic=document.getElementById("letterMusic");
+const popup=document.getElementById("popup");
+const popupText=document.getElementById("popupText");
+const msgSound=document.getElementById("msgSound");
+
+/* Birthday Countdown */
+const birthdayDate = new Date("2025-12-31T00:00:00");
+function updateCountdown(){
+ const now=new Date();
+ const diff=birthdayDate-now;
+ const el=document.getElementById("countdown");
+ if(diff<=0){ el.innerHTML="🎉 It's Your Birthday! 🎉"; confetti({particleCount:300,spread:90}); return;}
+ const d=Math.floor(diff/(1000*60*60*24));
+ const h=Math.floor((diff/(1000*60*60))%24);
+ const m=Math.floor((diff/(1000*60))%60);
+ const s=Math.floor((diff/1000)%60);
+ el.innerHTML=`⏳ ${d}d ${h}h ${m}m ${s}s to go`;
+}
+setInterval(updateCountdown,1000); updateCountdown();
+
+/* PAGE NAVIGATION */
+function nextPage(){
+ pages[current].classList.remove("active");
+ current++;
+ pages[current].classList.add("active");
+ if(pages[current].id==="letterPage"){ letterMusic.volume=0.6; letterMusic.play(); }
+ else{ letterMusic.pause(); }
+ confetti({particleCount:120,spread:70});
+}
+
+function unlock(){ if(pass.value==="love123"){ nextPage(); } else{ alert("Wrong password 😅"); } }
+
+/* POPUP MESSAGE */
+function typeText(text){ popupText.innerHTML=""; let i=0;
+ const typing=setInterval(()=>{ popupText.innerHTML+=text.charAt(i); i++; if(i>=text.length) clearInterval(typing); },30);
+}
+function openMessage(type){
+ let msg="";
+ if(type==="alone"){ msg="If you’re feeling alone right now… remember this: you matter, your presence is felt, and you are genuinely appreciated — more than you think 🤍"; }
+ if(type==="nostalgic"){ msg="Some memories feel warm because YOU were part of them. That softness you feel? That’s proof you lived something beautiful 🌸"; }
+ if(type==="boost"){ msg="Hey you… yes, YOU. You’re strong, capable, and way more impressive than you give yourself credit for 💪✨"; }
+ if(type==="smile"){ msg="If you smiled even a little right now, my job is done 😄 And if not… imagine me making the worst joke on purpose."; }
+ if(type==="night"){ msg="It’s quiet, the world is slower… just know you crossed someone’s thoughts tonight and left them smiling 🌙🤍"; }
+ popup.classList.add("active"); msgSound.play(); typeText(msg);
+}
+function closePopup(){ popup.classList.remove("active"); }
+
+/* MOBILE SWIPE */
+let touchStartX=0;
+document.addEventListener("touchstart",e=>{ touchStartX=e.changedTouches[0].screenX; });
+document.addEventListener("touchend",e=>{ let diff=e.changedTouches[0].screenX-touchStartX; if(diff<-80){ nextPage(); } });
+
+/* RUNAWAY NO BUTTON */
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", () => {
+ const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+ const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+ noBtn.style.position = "fixed";
+ noBtn.style.left = x + "px";
+ noBtn.style.top = y + "px";
+});
+
+/* DATE YES BUTTON -> MAGICAL BOUQUET */
+function dateYes(){
+ confetti({particleCount:250,spread:90});
+ nextPage(); // move to bouquet page
+}
+
+/* RESTART FUNCTION */
+function restart(){
+  pages.forEach(p=>p.classList.remove("active"));
+  current = 0;
+  pages[current].classList.add("active");
+  letterMusic.pause();
+  letterMusic.currentTime = 0;
+  confetti({particleCount:150,spread:80});
+}
+</script>
+</body>
+</html>
